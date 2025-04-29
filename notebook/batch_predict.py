@@ -1,12 +1,9 @@
-# notebooks/batch_predict.py
-
 import torch
 import pickle
 import json
 from transformers import BertTokenizer, BertForSequenceClassification
 import os
 
-# Load models
 with open("../models/logistic_model.pkl", "rb") as f:
     logistic_model = pickle.load(f)
 
@@ -17,11 +14,10 @@ bert_model = BertForSequenceClassification.from_pretrained("../models/bert_model
 tokenizer = BertTokenizer.from_pretrained("../models/bert_model")
 bert_model.eval()
 
-# Load paragraphs to predict
 from preprocess import preprocess_10k
 
 if __name__ == "__main__":
-    filepath = "../data/amazon_10k.html"  # Change if you want a different file
+    filepath = "../data/amazon_10k.html"  
 
     if not os.path.exists(filepath):
         print("Amazon 10-K not found. Please download it first.")
@@ -33,11 +29,9 @@ if __name__ == "__main__":
     results = []
 
     for para in paragraphs:
-        # Logistic prediction
         X = vectorizer.transform([para])
         pred_logistic = logistic_model.predict(X)[0]
 
-        # BERT prediction
         inputs = tokenizer(para, return_tensors="pt", truncation=True, padding=True, max_length=256)
         with torch.no_grad():
             outputs = bert_model(**inputs)
@@ -50,7 +44,6 @@ if __name__ == "__main__":
             "bert_prediction": int(pred_bert)
         })
 
-    # Save predictions
     os.makedirs("../predictions", exist_ok=True)
     with open("../predictions/amazon_predictions.json", "w", encoding="utf-8") as f:
         json.dump(results, f, indent=2)
