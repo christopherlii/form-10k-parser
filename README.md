@@ -60,10 +60,10 @@ weighted avg     0.7311    0.6801    0.6928      2488
 ```
 Explanation:
 For type 0 (blanks), 
-Precision (0.84): 84% of the time the model predicted type 0, it was actually type 0
-Recall (0.65): 65% of the time it wasn't type 0, the model accurately agreed it wasn't type 0
-F1-score (0.73): balance between precision and recall, 0.73 is relatively strong
-Support (1461): there were 1461 examples of type 0 in the data
+- Precision (0.84): 84% of the time the model predicted type 0, it was actually type 0
+- Recall (0.65): 65% of the time it wasn't type 0, the model accurately agreed it wasn't type 0
+- F1-score (0.73): balance between precision and recall, 0.73 is relatively strong
+- Support (1461): there were 1461 examples of type 0 in the data
 
 
 ### 4. To Predict A Company's labels
