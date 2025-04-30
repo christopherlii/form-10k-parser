@@ -60,7 +60,7 @@ Paragraphs:
 
 if __name__ == "__main__":
     files = [
-        "data/doordash_10k.html",
+        "data/qualcomm_10k.html",
     ]
 
     os.makedirs(OUTPUT_FOLDER, exist_ok=True)

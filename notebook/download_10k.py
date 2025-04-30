@@ -34,9 +34,9 @@ if __name__ == "__main__":
     companies = [
         #look at comment above
         {
-            "name": "Doordash",
-            "url": "https://www.sec.gov/Archives/edgar/data/1792789/000162828023005131/dash-20221231.htm",
-            "save_path": "data/doordash_10k.html"
+            "name": "Qualcomm",
+            "url": "https://www.sec.gov/Archives/edgar/data/804328/000093639201500225/a76829e10-k.htm",
+            "save_path": "data/qualcomm_10k.html"
         },
 
         
