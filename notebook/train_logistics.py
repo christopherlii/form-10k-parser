@@ -1,56 +1,47 @@
 import os
+import json
 import pickle
-from sklearn.model_selection import train_test_split
 from sklearn.feature_extraction.text import TfidfVectorizer
 from sklearn.linear_model import LogisticRegression
-from sklearn.metrics import accuracy_score, precision_score, recall_score, f1_score
 
-import json
+# 1. Paths
+SCRIPT_DIR = os.path.dirname(os.path.abspath(__file__))
+PROJECT_ROOT = os.path.dirname(SCRIPT_DIR)
+DATA_DIR    = os.path.join(PROJECT_ROOT, "ai_labeled")
+MODEL_DIR   = os.path.join(PROJECT_ROOT, "models")
+os.makedirs(MODEL_DIR, exist_ok=True)
 
-# Load your manually labeled paragraphs
-with open("../data/labeled_data.json", "r", encoding="utf-8") as f:
-    labeled_data = json.load(f)
+# 2. Load every company’s JSON
+companies = [
+    "airbnb", "alphabet", "apple", "coinbase", "datadog",
+    "microsoft", "netflix", "nvidia", "palantir", "panw",
+    "salesforce", "tesla"
+]
 
-texts = [item["paragraph"] for item in labeled_data]
-labels = [item["label"] for item in labeled_data]
+texts, labels = [], []
+for company in companies:
+    path = os.path.join(DATA_DIR, f"{company}_labeled_ai_batch.json")
+    if not os.path.exists(path):
+        print(f"⚠️  Missing file: {path}")
+        continue
+    with open(path, "r", encoding="utf-8") as f:
+        batch = json.load(f)
+    for item in batch:
+        texts.append(item["paragraph"])
+        labels.append(item["label"])
 
-
-#texts, labels = zip(*data)
-
-X_train, X_test, y_train, y_test = train_test_split(
-    texts, labels, test_size=0.25, random_state=42
-)
-
+# 3. Vectorize on all data
 vectorizer = TfidfVectorizer(max_features=1000, ngram_range=(1,2))
-X_train_vec = vectorizer.fit_transform(X_train)
-X_test_vec = vectorizer.transform(X_test)
+X_all = vectorizer.fit_transform(texts)
 
+# 4. Train on 100% of your data
 model = LogisticRegression(max_iter=1000, class_weight="balanced")
-model.fit(X_train_vec, y_train)
+model.fit(X_all, labels)
 
-preds = model.predict(X_test_vec)
-
-accuracy = accuracy_score(y_test, preds)
-precision = precision_score(y_test, preds)
-recall = recall_score(y_test, preds)
-f1 = f1_score(y_test, preds)
-
-print(f"Accuracy: {accuracy:.2f}")
-print(f"Precision: {precision:.2f}")
-print(f"Recall: {recall:.2f}")
-print(f"F1 Score: {f1:.2f}")
-
-os.makedirs("../models", exist_ok=True)
-with open("../models/logistic_model.pkl", "wb") as f:
+# 5. Save model & vectorizer
+with open(os.path.join(MODEL_DIR, "logistic_model.pkl"), "wb") as f:
     pickle.dump(model, f)
-with open("../models/vectorizer.pkl", "wb") as f:
+with open(os.path.join(MODEL_DIR, "vectorizer.pkl"), "wb") as f:
     pickle.dump(vectorizer, f)
 
-print("Model and vectorizer saved to models/ folder.")
-
-
-
-
-
-
-
+print(f"✅ Trained on all {len(texts)} samples and saved artifacts to '{MODEL_DIR}'")

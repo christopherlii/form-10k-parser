@@ -1,8 +1,19 @@
 # form-10k-parser
 
+## Directory Tree
+- Ai_labeled: .json files with GPT-labeled paragraphs of each company
+- Data: .html files of each company’s form 10-k (downloaded using notebook/download_10k with the sec.gov url)
+- Models: the trained models from each of ai_labeled data
+- Notebook: Where all the methods used to label, process, train, and predict data resides
+- Predicted_Labels: The labels our model predicts, using notebook/predict_logistics
+
+
 ## How to use
 
-psa: Make sure you are running this code from inside the project folder.
+NOTE: 
+
+1. Make sure you are running this code from inside the project folder.
+2. You should use the model to predict company labels BEFORE using AI to label the company, and then compare the two. 
 
 ### 1. To Download:
 
@@ -106,3 +117,49 @@ Follow (4) and (5)
 You should obtain the following output:
 
 TODO: update this following output, and do user input for all of the files
+
+
+
+## Each Method Explained
+
+### download_10k.py
+
+This file includes one main function which is run for every company inside a 'companies' array:
+```
+download_10k(url, save_path)
+```
+
+It simply opens the links html, and writes it into a corresponding file which is saved to the path specified in the array. The path should be of the form "data/{company}_10k.html" so that it saves into the data folder in the project.
+
+### predict_logistics.py
+
+
+
+
+### ai_label.py
+
+Thie file takes in a bunch of .html form-10k's from the data folder, calls a function:
+```
+batch_classify_paragraphs(paragraphs)
+```
+
+This function runs a loop that asks ChatGPT-3.5-turbo to label every for loop with a number from 0-4 given the following criteria:
+- 1: a financial highlight (often a statistic about the company's revenue, EBITDA, etc)
+- 2: a risk (a potential danger that will affect the companies business)
+- 3: a product (products are what the company has been working on in the last year)
+- 4: AI related (any talk about AI is a clear indication of the direction a company is trying to take for the near future)
+- 0: Everything else we have deemed irrelevant for a casual investor, and thus is labeled 0.
+
+The function processes 10 at a time, with a 0.5 second delay between each run, and outputs each .json file into the /ai_labeled folder
+
+### preprocess.py
+
+
+### train_logistics.py
+
+### calc_scores.py
+
+This file compares the similarities between two different files, a gpt-labeled form 10-k and a model-labeled form-10k. It takes each json file, matches each paragraph/label pair to its correspondent in the other file, and calls classification_report, imported from sklearn.metrics
+
+classification_report(matched_truths, matched_preds, digits=4) calculates the precision, recall, f1-score, and support given an input of our corpus and our predictions, as well as a digits variable that determines the decimal places of each output.
+

@@ -15,7 +15,7 @@ with open("models/vectorizer.pkl", "rb") as f:
 
 # 📚 2. Load and preprocess new 10-K
 # Change this path to whichever new 10-K you want to predict
-new_10k_path = "data/panw_10k.html"
+new_10k_path = "data/doordash_10k.html"
 
 paragraphs = preprocess_10k(new_10k_path)
 

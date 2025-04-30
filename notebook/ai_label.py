@@ -11,7 +11,7 @@ load_dotenv()
 openai.api_key = os.getenv("OPENAI_API_KEY")
 
 BATCH_SIZE = 10
-OUTPUT_FOLDER = "/ai_labeled"
+OUTPUT_FOLDER = "ai_labeled"
 
 def batch_classify_paragraphs(paragraphs):
     joined_paragraphs = "\n\n".join([
@@ -60,7 +60,7 @@ Paragraphs:
 
 if __name__ == "__main__":
     files = [
-        "data/panw_10k.html",
+        "data/doordash_10k.html",
     ]
 
     os.makedirs(OUTPUT_FOLDER, exist_ok=True)

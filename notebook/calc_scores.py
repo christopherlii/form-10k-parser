@@ -2,11 +2,11 @@ import json
 from sklearn.metrics import classification_report
 
 # Load model predictions
-with open("predicted_labeled/panw_10k_predicted_logistics.json", "r", encoding="utf-8") as f:
+with open("predicted_labels/doordash_10k_predicted_logistics.json", "r", encoding="utf-8") as f:
     predicted_data = json.load(f)
 
 # Load ground-truth labels
-with open("ai_labeled/panw_labeled_ai_batch.json", "r", encoding="utf-8") as f:
+with open("ai_labeled/doordash_labeled_ai_batch.json", "r", encoding="utf-8") as f:
     true_data = json.load(f)
 
 # Safe matching based on paragraph content

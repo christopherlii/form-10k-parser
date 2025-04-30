@@ -8,7 +8,7 @@ def download_10k(url, save_path):
     Downloads a 10-K filing directly from a full SEC HTML URL.
     """
     headers = {
-        "User-Agent": "MyNLPProject/1.0 (your_email@example.com)"  # Replace with your email
+        "User-Agent": "NLPFinalProject/1.0 (christopherli@nyu.edu)"  # Replace with your email
     }
     response = requests.get(url, headers=headers)
 
@@ -26,13 +26,20 @@ Follow this format for the companies:
 {
     "name": "Apple",
     "url": "https://www.sec.gov/Archives/edgar/data/320193/000032019324000123/aapl-20240928.htm",
-    "save_path": "../data/apple_10k.html"
+    "save_path": "data/apple_10k.html"
 },
 """
 
 if __name__ == "__main__":
     companies = [
         #look at comment above
+        {
+            "name": "Doordash",
+            "url": "https://www.sec.gov/Archives/edgar/data/1792789/000162828023005131/dash-20221231.htm",
+            "save_path": "data/doordash_10k.html"
+        },
+
+        
         
     ]
 
